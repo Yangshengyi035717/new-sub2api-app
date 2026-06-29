@@ -392,3 +392,21 @@
   - `docs/UNIAPP_H5_REBUILD.md`：补充 APK 使用 Git LFS 入库的说明。
   - `progress.md`：追加本轮 LFS 配置记录。
 - Rollback: 删除 `.gitattributes` 中 `dist/local-apk/*.apk` 的 LFS 规则；如已提交 APK，可用 `git rm --cached` 移除 LFS 指针并删除远端对应对象。
+
+## 2026-06-29 - Task: 修复 GitHub 中文文档乱码
+### What was done
+- 重写 `README.zh-CN.md` 为标准 UTF-8 中文内容，修复 GitHub 页面显示为 `????` 的问题。
+- 修复 `README.md` 中指向中文说明的链接文字。
+- 重写 `docs/UNIAPP_H5_REBUILD.md`，清理此前写入的 mojibake 乱码段落，并保留 H5/App 构建、APK、Git LFS 和验证说明。
+
+### Testing
+- 字节级核验：`README.zh-CN.md` 中 `中文` 两个字符的 Unicode 码点为 `20013 / 25991`，确认文件内容为正常 Unicode 文本。
+- `Select-String` 检查 `README.md`、`README.zh-CN.md`、`docs/UNIAPP_H5_REBUILD.md`：未发现 `????`、`锛`、`鐨`、`瀹`、`�`、`鈥` 等常见乱码标记。
+
+### Notes
+- Modified files:
+  - `README.zh-CN.md`：重写中文说明，恢复正常中文。
+  - `README.md`：修复中文说明链接文字。
+  - `docs/UNIAPP_H5_REBUILD.md`：清理乱码段落并重写构建/打包说明。
+  - `progress.md`：追加本轮修复记录。
+- Rollback: 使用 Git 回滚上述文档文件即可。
