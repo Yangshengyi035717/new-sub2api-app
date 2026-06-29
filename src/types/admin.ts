@@ -1,4 +1,4 @@
-export type ApiEnvelope<T> = {
+﻿export type ApiEnvelope<T> = {
   code: number;
   message: string;
   reason?: string;
@@ -112,6 +112,7 @@ export type AdminUser = {
   role?: string;
   current_concurrency?: number;
   notes?: string | null;
+  last_active_at?: string | null;
   last_used_at?: string | null;
   created_at?: string;
   updated_at?: string;
@@ -179,6 +180,19 @@ export type AccountTodayStats = {
   user_cost?: number;
 };
 
+export type AccountTestResult = {
+  ok: boolean;
+  message: string;
+  eventType?: string;
+};
+
+export type AccountModelOption = {
+  id: string;
+  display_name?: string;
+  name?: string;
+  model?: string;
+};
+
 export type AdminAccount = {
   id: number;
   name: string;
@@ -193,9 +207,10 @@ export type AdminAccount = {
   error_message?: string;
   updated_at?: string;
   last_used_at?: string | null;
+  rate_limit_reset_at?: string | null;
   group_ids?: number[];
   groups?: AdminGroup[];
-  extra?: Record<string, string | number | boolean | null>;
+  extra?: Record<string, unknown>;
 };
 
 export type AccountType = 'apikey' | 'oauth' | 'setup-token' | 'upstream';

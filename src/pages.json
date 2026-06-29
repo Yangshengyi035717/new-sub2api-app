@@ -1,0 +1,132 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "管理员入口",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/monitor/index",
+      "style": {
+        "navigationBarTitleText": "概览",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/monitor/metric-detail",
+      "style": {
+        "navigationBarTitleText": "指标明细",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/users/index",
+      "style": {
+        "navigationBarTitleText": "用户",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/users/detail",
+      "style": {
+        "navigationBarTitleText": "用户详情",
+        "navigationBarBackgroundColor": "#0f172a",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/users/create-user",
+      "style": {
+        "navigationBarTitleText": "添加用户",
+        "navigationBarBackgroundColor": "#0f172a",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/accounts/index",
+      "style": {
+        "navigationBarTitleText": "账号",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/accounts/create",
+      "style": {
+        "navigationBarTitleText": "添加账号",
+        "navigationBarBackgroundColor": "#0f172a",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/groups/index",
+      "style": {
+        "navigationBarTitleText": "分组",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/settings/index",
+      "style": {
+        "navigationBarTitleText": "服务器",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#64748b",
+    "selectedColor": "#2563eb",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/monitor/index",
+        "text": "概览",
+        "iconPath": "static/tabbar/overview.png",
+        "selectedIconPath": "static/tabbar/overview-active.png"
+      },
+      {
+        "pagePath": "pages/users/index",
+        "text": "用户",
+        "iconPath": "static/tabbar/users.png",
+        "selectedIconPath": "static/tabbar/users-active.png"
+      },
+      {
+        "pagePath": "pages/accounts/index",
+        "text": "账号",
+        "iconPath": "static/tabbar/accounts.png",
+        "selectedIconPath": "static/tabbar/accounts-active.png"
+      },
+      {
+        "pagePath": "pages/groups/index",
+        "text": "分组",
+        "iconPath": "static/tabbar/groups.png",
+        "selectedIconPath": "static/tabbar/groups-active.png"
+      },
+      {
+        "pagePath": "pages/settings/index",
+        "text": "服务器",
+        "iconPath": "static/tabbar/settings.png",
+        "selectedIconPath": "static/tabbar/settings-active.png"
+      }
+    ]
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Sub2API Mobile",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f8fafc"
+  },
+  "condition": {
+    "current": 0,
+    "list": []
+  }
+}

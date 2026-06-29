@@ -1,0 +1,23 @@
+{
+    "name" : "sub2api-mobile",
+    "appid" : "__UNI__H565806EC",
+    "description" : "Sub2API mobile admin console rebuilt with uni-app CLI and Vue 3.",
+    "versionName" : "2.1.2",
+    "versionCode" : "212",
+    "transformPx" : false,
+    "h5" : {
+        "title" : "Sub2API Mobile",
+        "router" : {
+            "mode" : "hash"
+        }
+    },
+    "app-plus" : {
+        "usingComponents" : true,
+        "distribute" : {
+            "ios" : {
+                "dSYMs" : false
+            }
+        }
+    },
+    "vueVersion" : "3"
+}

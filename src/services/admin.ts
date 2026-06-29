@@ -1,6 +1,8 @@
-import { adminFetch } from '@/src/lib/admin-fetch';
+import { adminFetch } from '@/services/admin-fetch';
 import type {
   AccountTodayStats,
+  AccountTestResult,
+  AccountModelOption,
   AdminAccount,
   AdminApiKey,
   AdminGroup,
@@ -16,20 +18,20 @@ import type {
   PaginatedData,
   UsageStats,
   UserUsageSummary,
-} from '@/src/types/admin';
+} from '@/types/admin';
 
 function buildQuery(params: Record<string, string | number | boolean | null | undefined>) {
-  const query = new URLSearchParams();
+  const parts: string[] = [];
 
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
-      query.set(key, String(value));
-    }
-  });
+  for (const key in params) {
+    const value = params[key];
+    if (value === undefined || value === null || value === '') continue;
+    parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
+  }
 
-  const value = query.toString();
+  const query = parts.join('&');
 
-  return value ? `?${value}` : '';
+  return query ? `?${query}` : '';
 }
 
 export function getDashboardStats() {
@@ -87,10 +89,8 @@ export function getUsageStats(params: {
   return adminFetch<UsageStats>(`/api/v1/admin/usage/stats${buildQuery(params)}`);
 }
 
-export function listUsers(search = '') {
-  return adminFetch<PaginatedData<AdminUser>>(
-    `/api/v1/admin/users${buildQuery({ page: 1, page_size: 20, search: search.trim() })}`
-  );
+export function listUsers(search = '', page = 1, pageSize = 20) {
+  return adminFetch<PaginatedData<AdminUser>>(`/api/v1/admin/users${buildQuery({ page, page_size: pageSize, search: search.trim() })}`);
 }
 
 export function getUser(userId: number) {
@@ -100,7 +100,7 @@ export function getUser(userId: number) {
 export function createUser(body: CreateUserRequest) {
   return adminFetch<AdminUser>('/api/v1/admin/users', {
     method: 'POST',
-    body: JSON.stringify(body),
+    data: body,
   });
 }
 
@@ -112,15 +112,12 @@ export function listUserApiKeys(userId: number) {
   return adminFetch<PaginatedData<AdminApiKey>>(`/api/v1/admin/users/${userId}/api-keys${buildQuery({ page: 1, page_size: 100 })}`);
 }
 
-export function updateUserBalance(
-  userId: number,
-  body: { balance: number; operation: BalanceOperation; notes?: string }
-) {
+export function updateUserBalance(userId: number, body: { balance: number; operation: BalanceOperation; notes?: string }) {
   return adminFetch<AdminUser>(
     `/api/v1/admin/users/${userId}/balance`,
     {
       method: 'POST',
-      body: JSON.stringify(body),
+      data: body,
     },
     {
       idempotencyKey: `user-balance-${userId}-${Date.now()}`,
@@ -131,24 +128,16 @@ export function updateUserBalance(
 export function updateUserStatus(userId: number, status: 'active' | 'disabled') {
   return adminFetch<AdminUser>(`/api/v1/admin/users/${userId}`, {
     method: 'PUT',
-    body: JSON.stringify({ status }),
+    data: { status },
   });
 }
 
 export function listGroups(search = '') {
-  return adminFetch<PaginatedData<AdminGroup>>(
-    `/api/v1/admin/groups${buildQuery({ page: 1, page_size: 20, search: search.trim() })}`
-  );
-}
-
-export function getGroup(groupId: number) {
-  return adminFetch<AdminGroup>(`/api/v1/admin/groups/${groupId}`);
+  return adminFetch<PaginatedData<AdminGroup>>(`/api/v1/admin/groups${buildQuery({ page: 1, page_size: 20, search: search.trim() })}`);
 }
 
 export function listAccounts(search = '') {
-  return adminFetch<PaginatedData<AdminAccount>>(
-    `/api/v1/admin/accounts${buildQuery({ page: 1, page_size: 20, search: search.trim() })}`
-  );
+  return adminFetch<PaginatedData<AdminAccount>>(`/api/v1/admin/accounts${buildQuery({ page: 1, page_size: 20, search: search.trim() })}`);
 }
 
 export function getAccount(accountId: number) {
@@ -158,7 +147,7 @@ export function getAccount(accountId: number) {
 export function createAccount(body: CreateAccountRequest) {
   return adminFetch<AdminAccount>('/api/v1/admin/accounts', {
     method: 'POST',
-    body: JSON.stringify(body),
+    data: body,
   });
 }
 
@@ -166,10 +155,23 @@ export function getAccountTodayStats(accountId: number) {
   return adminFetch<AccountTodayStats>(`/api/v1/admin/accounts/${accountId}/today-stats`);
 }
 
-export function testAccount(accountId: number) {
-  return adminFetch(`/api/v1/admin/accounts/${accountId}/test`, {
-    method: 'POST',
-  });
+export function getAccountModels(accountId: number) {
+  return adminFetch<AccountModelOption[]>(`/api/v1/admin/accounts/${accountId}/models`);
+}
+
+export function testAccount(accountId: number, modelId?: string) {
+  return adminFetch<AccountTestResult>(
+    `/api/v1/admin/accounts/${accountId}/test`,
+    {
+      method: 'POST',
+      data: modelId ? { model_id: modelId, prompt: '' } : undefined,
+    },
+    {
+      acceptEventStream: true,
+      allowBareJson: true,
+      timeout: 30000,
+    }
+  );
 }
 
 export function refreshAccount(accountId: number) {
@@ -181,6 +183,6 @@ export function refreshAccount(accountId: number) {
 export function setAccountSchedulable(accountId: number, schedulable: boolean) {
   return adminFetch<AdminAccount>(`/api/v1/admin/accounts/${accountId}/schedulable`, {
     method: 'POST',
-    body: JSON.stringify({ schedulable }),
+    data: { schedulable },
   });
 }

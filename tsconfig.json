@@ -1,21 +1,21 @@
 {
-  "extends": "expo/tsconfig.base",
-  "exclude": [
-    "dist",
-    "node_modules",
-    ".agents",
-    "skills"
-  ],
   "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "strict": true,
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["@dcloudio/types", "node"],
     "baseUrl": ".",
-    "types": [
-      "uniwind/types"
-    ],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "vite.config.ts"],
+  "exclude": ["node_modules", "dist", ".agents", "skills", "app", "server"]
 }
