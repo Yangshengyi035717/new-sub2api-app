@@ -3,6 +3,12 @@
 [English](README.md) | [中文](README.zh-CN.md)
 
 Sub2API Mobile Admin 是基于 uni-app CLI + Vue 3 重建的 Sub2API 移动端管理台。项目保留原有管理流程，同时支持 H5 和 App 构建，并提供蓝白玻璃拟态风格的移动端运维看板。
+<img width="670" height="936" alt="1782579122104 jpg" src="https://github.com/user-attachments/assets/b470b97d-e20f-4622-b1f6-3a987a738446" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-42-216_io H565806EC" src="https://github.com/user-attachments/assets/7b5ab644-635b-461b-a1e9-8992083f2be0" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-34-532_io H565806EC" src="https://github.com/user-attachments/assets/90fed202-d018-45b2-8d41-1f27c65415f6" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-52-477_io H565806EC" src="https://github.com/user-attachments/assets/26285be3-e3dc-4e97-9f45-8e2e73679947" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-48-605_io H565806EC" src="https://github.com/user-attachments/assets/a9c1fc94-b452-4970-bec8-89ba5da73d42" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-45-839_io H565806EC" src="https://github.com/user-attachments/assets/7a078f6f-858e-43d8-8f45-b8ae0b2ba150" />
 
 ## 功能特性
 
