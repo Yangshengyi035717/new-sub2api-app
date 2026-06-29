@@ -146,7 +146,7 @@ async function handleDelete(accountId: string) {
 }
 
 .server-card-active {
-  border-color: rgba(37, 99, 235, 0.55);
-  background: rgba(239, 246, 255, 0.95);
+  border-color: rgba(0, 151, 216, 0.5);
+  background: linear-gradient(145deg, rgba(231, 249, 255, 0.96), rgba(255, 255, 255, 0.78));
 }
 </style>

@@ -1,4 +1,4 @@
-﻿## 2026-06-23 - Task: Rebuild Sub2API mobile admin as uni-app CLI Vue3 H5
+## 2026-06-23 - Task: Rebuild Sub2API mobile admin as uni-app CLI Vue3 H5
 ### What was done
 - 梳理原 Expo/React Native 项目功能，并用 uni-app CLI + Vue 3 重建 H5 管理端入口。
 - 复刻登录、服务器配置、概览、用户列表/详情/创建、账号列表/创建、分组列表等原有管理流程。
@@ -330,3 +330,65 @@
   - `dist/local-apk/sub2api-mobile-local-ui-2.1.2.apk`：生成本轮可安装 Android APK。
 - Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-ui-2.1.2.apk`。
 - Rollback: 使用 Git 回滚上述源码、文档和日志文件；删除 `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-ui-2.1.2.apk`；如需回到上一安装包，可继续使用 `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-fixes-2.1.1.apk`。
+
+
+## 2026-06-29 - Task: 账号/分组页安全守卫完善与分组信息增强
+### What was done
+- 为账号页和分组页补充了未连接服务器的安全守卫（`hasAccount` computed 和 `NoticeBlock` 提示），与概览页、用户页保持一致。
+- 账号页筛选栏合并为单行：状态筛选 chip + 用量排序 chip，减少垂直空间占用，标签文本更紧凑。
+- 分组卡片补充了订阅类型、倍率、描述、日/周/月限额和创建时间等完整字段，业务运营人员可直接在列表卡片获取关键配额信息。
+- App 版本提升至 `2.1.3 / 213`。
+
+### Testing
+- `npm run build:h5`：通过，H5 构建成功。
+- `npm run build:app`：通过，App 构建成功，`compilerVersion` 修正为 5.13。
+- H5 产物核验：`pages-accounts-*.js` 和 `pages-groups-*.js` 均包含新增守卫逻辑和分组增强字段。
+- App 产物核验：`app-service.js` 包含 `accounts/index`、`groups/index` 页面引用。
+
+### Notes
+- Modified files:
+  - `src/pages/accounts/index.vue`：新增 `hasAccount` 守卫与 `NoticeBlock` 未连接提示；合并筛选 chip 为单行；用 `<template v-if="hasAccount">` 包裹主内容。
+  - `src/pages/groups/index.vue`：新增 `hasAccount` 守卫与 `NoticeBlock` 未连接提示；分组卡片展示订阅类型、倍率、日/周/月限额、创建时间；新增 `formatMoney` 导入和 `group-meta-row` 样式。
+  - `src/manifest.json`：App 版本提升至 `2.1.3 / 213`。
+  - `docs/UNIAPP_H5_REBUILD.md`：补充本轮改动记录。
+  - `progress.md`：追加本轮记录。
+- Rollback: 使用 Git 回滚上述源文件、文档和日志。
+
+## 2026-06-29 - Task: 打包本地 Android APK 2.1.3
+### What was done
+- 将 App 版本同步为 `2.1.3 / 213`。
+- 重新执行 `npm run build:app`，生成最新 `dist/build/app` 资源，并由 `scripts/fix-app-runtime-version.cjs` 修正 App Runtime `compilerVersion`。
+- 基于 `dist/local-apk/sub2api-mobile-local-ui-2.1.2.apk` 解包，替换 `assets/apps/__UNI__H565806EC/www` 为本轮最新 App 构建资源。
+- 同步 APK 原生版本、uni-app 内部 manifest 版本和 `dcloud_control.xml` appver，生成并签名本地 Android APK。
+
+### Testing
+- `npm run build:app`：通过，App 构建成功，`compilerVersion` 修正为 5.13。
+- `zipalign -c -p 4 dist/local-apk/sub2api-mobile-local-guard-groups-2.1.3.apk`：通过。
+- `apksigner verify --verbose dist/local-apk/sub2api-mobile-local-guard-groups-2.1.3.apk`：通过，v1/v2 均为 true。
+- APK 内容核验：原生 `versionName: 2.1.3`、`versionCode: 213`；uni-app 内部 manifest 为 `2.1.3 / 213`；`dcloud_control.xml` 中 appver 为 `2.1.3`；`app-service.js` 包含 `pages/accounts/index`、`pages/groups/index` 和分组增强字段标记。
+
+### Notes
+- Modified files:
+  - `src/manifest.json`：将 App 版本提升至 `2.1.3 / 213`。
+  - `docs/UNIAPP_H5_REBUILD.md`：补充本地 APK 2.1.3 的产物路径、打包方式和验证记录。
+  - `progress.md`：追加本轮 APK 打包记录。
+  - `dist/local-apk/sub2api-mobile-local-guard-groups-2.1.3.apk`：生成本轮可安装 Android APK。
+- Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-guard-groups-2.1.3.apk`。
+- Signing: 使用 HBuilderX 自带 `Test.keystore` 测试证书签名，适合本地安装验证；正式发布需改用生产证书。
+- Rollback: 使用 Git 回滚 `src/manifest.json`、`docs/UNIAPP_H5_REBUILD.md`、`progress.md`；删除 `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-guard-groups-2.1.3.apk`；如需回到上一包，可继续使用 `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-ui-2.1.2.apk`。
+
+## 2026-06-29 - Task: 配置 APK Git LFS 入库
+### What was done
+- 为 `dist/local-apk/*.apk` 配置 Git LFS 跟踪，避免超过 GitHub 普通 Git 单文件 100MB 限制。
+- 准备将本轮最终 APK 作为 LFS 对象随源码一起推送到远端仓库。
+
+### Testing
+- `git lfs version`：通过，本机 Git LFS 可用。
+- `git lfs track "dist/local-apk/*.apk"`：通过，已生成 `.gitattributes` 规则。
+
+### Notes
+- Modified files:
+  - `.gitattributes`：新增 APK 的 Git LFS 跟踪规则。
+  - `docs/UNIAPP_H5_REBUILD.md`：补充 APK 使用 Git LFS 入库的说明。
+  - `progress.md`：追加本轮 LFS 配置记录。
+- Rollback: 删除 `.gitattributes` 中 `dist/local-apk/*.apk` 的 LFS 规则；如已提交 APK，可用 `git rm --cached` 移除 LFS 指针并删除远端对应对象。

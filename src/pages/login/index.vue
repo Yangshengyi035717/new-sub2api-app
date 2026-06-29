@@ -98,14 +98,14 @@ async function handleLogin() {
   font-size: 58rpx;
   line-height: 1.08;
   font-weight: 950;
-  color: #0f172a;
+  color: #07111f;
 }
 
 .login-subtitle {
   display: block;
   margin-top: 18rpx;
   max-width: 640rpx;
-  color: #64748b;
+  color: #536274;
   font-size: 27rpx;
   line-height: 1.55;
 }

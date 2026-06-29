@@ -279,7 +279,7 @@ const sparklineChartData = computed(() => ({
     {
       name: 'QPS',
       data: trendSource.value.map((item) => Number(item.requests ?? 0)),
-      color: '#3b82f6',
+      color: '#0099e5',
     },
   ],
 }));
@@ -290,13 +290,13 @@ const throughputMixChartData = computed(() => ({
       name: '请求',
       type: 'column',
       data: trendSource.value.map((item) => Number(item.requests ?? 0)),
-      color: '#3b82f6',
+      color: '#0099e5',
     },
     {
       name: 'Token',
       type: 'line',
       data: trendSource.value.map((item) => Number(item.total_tokens ?? 0)),
-      color: '#10b981',
+      color: '#00ad9d',
       index: 1,
     },
   ],
@@ -307,7 +307,7 @@ const requestColumnChartData = computed(() => ({
     {
       name: '请求量',
       data: trendSource.value.map((item) => Number(item.requests ?? 0)),
-      color: '#2563eb',
+      color: '#008ee8',
     },
   ],
 }));
@@ -317,7 +317,7 @@ const costLineChartData = computed(() => ({
     {
       name: '成本',
       data: trendSource.value.map((item) => Number(item.cost ?? 0)),
-      color: '#f97316',
+      color: '#ff8a45',
     },
   ],
 }));
@@ -326,7 +326,7 @@ const healthArcChartData = computed(() => ({
     {
       name: healthLabel.value,
       data: healthScore.value / 100,
-      color: healthScore.value >= 85 ? '#10b981' : healthScore.value >= 65 ? '#f59e0b' : '#ef4444',
+      color: healthScore.value >= 85 ? '#00ad9d' : healthScore.value >= 65 ? '#f2ad2e' : '#e45a4f',
     },
   ],
 }));
@@ -334,28 +334,28 @@ const accountRingChartData = computed(() => ({
   series: [
     {
       data: [
-        { name: '健康', value: healthyAccounts.value, color: '#10b981' },
-        { name: '异常', value: errorAccounts.value, color: '#ef4444' },
-        { name: '限流', value: limitedAccounts.value, color: '#f59e0b' },
+        { name: '健康', value: healthyAccounts.value, color: '#00ad9d' },
+        { name: '异常', value: errorAccounts.value, color: '#e45a4f' },
+        { name: '限流', value: limitedAccounts.value, color: '#f2ad2e' },
       ],
     },
   ],
 }));
 const commonChartOpts = {
-  color: ['#3b82f6', '#10b981', '#f97316', '#ef4444', '#8b5cf6'],
+  color: ['#0099e5', '#00ad9d', '#ff8a45', '#e45a4f', '#8b5cf6'],
   padding: [10, 10, 0, 4],
   dataLabel: false,
   dataPointShape: false,
   legend: { show: true, position: 'top', float: 'right' },
   xAxis: {
     disableGrid: true,
-    fontColor: '#94a3b8',
+    fontColor: '#667386',
     axisLine: false,
   },
   yAxis: {
     gridType: 'dash',
     dashLength: 4,
-    data: [{ fontColor: '#94a3b8' }],
+    data: [{ fontColor: '#667386' }],
   },
   extra: {
     tooltip: { showBox: true },
@@ -393,8 +393,8 @@ const mixOpts = {
   yAxis: {
     ...commonChartOpts.yAxis,
     data: [
-      { title: '请求', fontColor: '#94a3b8' },
-      { title: 'Token', position: 'right', fontColor: '#10b981' },
+      { title: '请求', fontColor: '#667386' },
+      { title: 'Token', position: 'right', fontColor: '#00ad9d' },
     ],
   },
 };
@@ -424,7 +424,7 @@ const lineOpts = {
   },
 };
 const healthArcOpts = computed(() => ({
-  color: [healthScore.value >= 85 ? '#10b981' : healthScore.value >= 65 ? '#f59e0b' : '#ef4444'],
+  color: [healthScore.value >= 85 ? '#00ad9d' : healthScore.value >= 65 ? '#f2ad2e' : '#e45a4f'],
   padding: [0, 0, 0, 0],
   title: { name: '', fontSize: 1 },
   subtitle: { name: '', fontSize: 1 },
@@ -440,18 +440,18 @@ const healthArcOpts = computed(() => ({
   },
 }));
 const ringOpts = computed(() => ({
-  color: ['#10b981', '#ef4444', '#f59e0b'],
+  color: ['#00ad9d', '#e45a4f', '#f2ad2e'],
   padding: [0, 0, 0, 0],
   legend: { show: false },
   title: {
     name: formatNumber(totalAccounts.value),
     fontSize: 22,
-    color: '#0f172a',
+    color: '#07111f',
   },
   subtitle: {
     name: '账号',
     fontSize: 12,
-    color: '#64748b',
+    color: '#536274',
   },
   extra: {
     ring: {
@@ -579,7 +579,7 @@ onPullDownRefresh(() => {
 }
 
 .health-score {
-  color: #f59e0b;
+  color: #f2ad2e;
   font-size: 44rpx;
   line-height: 1;
   font-weight: 950;
@@ -588,7 +588,7 @@ onPullDownRefresh(() => {
 .health-label,
 .health-title {
   margin-top: 8rpx;
-  color: #64748b;
+  color: #536274;
   font-size: 21rpx;
   font-weight: 800;
 }
@@ -611,7 +611,7 @@ onPullDownRefresh(() => {
   flex-direction: row;
   align-items: center;
   gap: 10rpx;
-  color: #64748b;
+  color: #536274;
   font-size: 22rpx;
   font-weight: 800;
 }
@@ -620,13 +620,13 @@ onPullDownRefresh(() => {
   width: 18rpx;
   height: 18rpx;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #0099e5;
   box-shadow: 0 0 0 8rpx rgba(59, 130, 246, 0.12);
 }
 
 .info-muted {
   margin-left: auto;
-  color: #94a3b8;
+  color: #667386;
 }
 
 .live-metrics {
@@ -638,14 +638,14 @@ onPullDownRefresh(() => {
 
 .live-number {
   display: inline;
-  color: #0f172a;
+  color: #07111f;
   font-size: 40rpx;
   font-weight: 950;
 }
 
 .live-label {
   margin-left: 8rpx;
-  color: #64748b;
+  color: #536274;
   font-size: 22rpx;
   font-weight: 900;
 }
@@ -666,9 +666,9 @@ onPullDownRefresh(() => {
   min-height: 168rpx;
   padding: 24rpx;
   border-radius: 32rpx;
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  box-shadow: 0 8rpx 48rpx rgba(15, 23, 42, 0.05);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(218, 242, 255, 0.72));
+  border: 2rpx solid rgba(0, 151, 216, 0.32);
+  box-shadow: 0 18rpx 54rpx rgba(19, 125, 180, 0.14), inset 0 2rpx 0 rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -679,23 +679,23 @@ onPullDownRefresh(() => {
 
 .ops-metric-clickable:active {
   transform: translateY(-2rpx);
-  border-color: rgba(147, 197, 253, 0.6);
+  border-color: rgba(0, 151, 216, 0.44);
 }
 
 .metric-link {
   margin-left: auto;
-  color: #3b82f6;
+  color: #0099e5;
   font-size: 20rpx;
 }
 
 .metric-card-label {
-  color: #94a3b8;
+  color: #667386;
 }
 
 .metric-card-value {
   display: block;
   margin-top: 14rpx;
-  color: #0f172a;
+  color: #07111f;
   font-size: 42rpx;
   line-height: 1.05;
   font-weight: 950;
@@ -704,21 +704,21 @@ onPullDownRefresh(() => {
 .metric-card-detail {
   display: block;
   margin-top: 12rpx;
-  color: #94a3b8;
+  color: #667386;
   font-size: 21rpx;
   line-height: 1.35;
 }
 
 .ops-metric-danger .metric-card-value {
-  color: #ef4444;
+  color: #e45a4f;
 }
 
 .ops-metric-warning .metric-card-value {
-  color: #f59e0b;
+  color: #f2ad2e;
 }
 
 .ops-metric-success .metric-card-value {
-  color: #10b981;
+  color: #00ad9d;
 }
 
 .account-health-grid {
@@ -746,22 +746,22 @@ onPullDownRefresh(() => {
   min-height: 54rpx;
   padding: 0 18rpx;
   border-radius: 20rpx;
-  background: rgba(255, 255, 255, 0.45);
-  color: #64748b;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 246, 255, 0.68));
+  color: #536274;
   font-size: 23rpx;
   font-weight: 850;
 }
 
 .health-ok {
-  color: #10b981;
+  color: #00ad9d;
 }
 
 .health-danger {
-  color: #ef4444;
+  color: #e45a4f;
 }
 
 .health-warning {
-  color: #f59e0b;
+  color: #f2ad2e;
 }
 
 .chart-panel {

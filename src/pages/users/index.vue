@@ -215,8 +215,9 @@ onPullDownRefresh(() => {
   min-width: 0;
   padding: 16rpx;
   border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 246, 255, 0.68));
+  border: 2rpx solid rgba(255, 255, 255, 0.86);
+  box-shadow: inset 0 2rpx 0 rgba(255, 255, 255, 0.9);
 }
 
 .summary-label,
@@ -225,13 +226,13 @@ onPullDownRefresh(() => {
 }
 
 .summary-label {
-  color: #94a3b8;
+  color: #667386;
   font-size: 20rpx;
 }
 
 .summary-value {
   margin-top: 6rpx;
-  color: #0f172a;
+  color: #07111f;
   font-size: 28rpx;
   font-weight: 900;
 }
@@ -243,7 +244,7 @@ onPullDownRefresh(() => {
 
 .pagination-end {
   padding: 18rpx 0 8rpx;
-  color: #94a3b8;
+  color: #667386;
   text-align: center;
   font-size: 22rpx;
 }

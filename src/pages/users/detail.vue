@@ -33,7 +33,7 @@
         </view>
       </SectionCard>
 
-      <MiniTrend title="用量趋势" :subtitle="`${range.start_date} 到 ${range.end_date}`" :points="trendPoints" color="#2563eb" />
+      <MiniTrend title="用量趋势" :subtitle="`${range.start_date} 到 ${range.end_date}`" :points="trendPoints" color="#008ee8" />
 
       <SectionCard title="API Keys">
         <input v-model="keySearch" class="input mb-16" placeholder="搜索名称 / Key / 分组" />
@@ -250,8 +250,9 @@ onLoad((query) => {
   margin-top: 18rpx;
   padding: 18rpx;
   border-radius: 18rpx;
-  background: #f8fafc;
-  color: #334155;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 246, 255, 0.68));
+  border: 2rpx solid rgba(255, 255, 255, 0.86);
+  color: #33435a;
   font-size: 22rpx;
   line-height: 1.4;
   word-break: break-all;

@@ -1,4 +1,4 @@
-﻿# Uni-app Vue3 H5 Rebuild
+# Uni-app Vue3 H5 Rebuild
 
 This project has been rebuilt as a uni-app CLI + Vue 3 H5 admin console while keeping the original Sub2API admin workflow.
 
@@ -146,3 +146,37 @@ Install note: because this APK uses a local debug/test certificate, uninstall an
 - The local APK above is suitable for installation/testing when cloud quota is exhausted; production distribution should use an official release keystore or HBuilderX cloud packaging.
 - iOS packaging requires Apple signing assets and a macOS/iOS packaging workflow.
 - App runtime requests are native requests and are not blocked by browser CORS like H5 direct requests.
+
+
+## 2026-06-29 - 安全守卫与分组完善
+
+### 改动
+- **账号页（accounts/index）**：新增未连接服务器守卫和提示；合并筛选 chip 为单行（状态筛选 + 用量排序）；`v-if="hasAccount"` 包裹主内容区域。
+- **分组页（groups/index）**：新增未连接服务器守卫和提示；分组卡片补充订阅类型、倍率、描述、日/周/月限额和创建时间等字段；新增 `formatMoney` 导入。
+- **App 版本**：升级至 `2.1.3 / 213`。
+
+### 构建
+- `npm run build:h5`：通过
+- `npm run build:app`：通过，`compilerVersion` 已修正至 5.13
+
+### APK 路径
+- `dist/local-apk/`（本地未安装 Android SDK 工具时需手动打包签名）
+
+## 2026-06-29 - 本地 APK 2.1.3
+
+### 产物
+- `dist/local-apk/sub2api-mobile-local-guard-groups-2.1.3.apk`
+
+### 打包方式
+- 使用 `npm run build:app` 生成 `dist/build/app`。
+- 基于 `dist/local-apk/sub2api-mobile-local-ui-2.1.2.apk` 解包，替换 `assets/apps/__UNI__H565806EC/www`。
+- 同步原生 APK `versionName/versionCode` 为 `2.1.3 / 213`，并同步 `assets/data/dcloud_control.xml` 的 `appver`。
+- 使用 HBuilderX 自带 `zipalign` 对齐，并使用 HBuilderX `Test.keystore` 测试证书签名。
+
+### 验证
+- `zipalign -c -p 4`：通过。
+- `apksigner verify --verbose`：通过，v1/v2 均为 true。
+- APK 内部 uni-app manifest：`2.1.3 / 213`，`compilerVersion` 为 `5.13`。
+
+### Repository Storage
+- `dist/local-apk/*.apk` is tracked with Git LFS because the local APK is larger than GitHub's regular 100 MB file limit.

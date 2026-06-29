@@ -19,7 +19,7 @@
       "path": "pages/monitor/metric-detail",
       "style": {
         "navigationBarTitleText": "指标明细",
-        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarBackgroundColor": "#f7fdff",
         "navigationBarTextStyle": "black",
         "enablePullDownRefresh": true
       }
@@ -36,16 +36,16 @@
       "path": "pages/users/detail",
       "style": {
         "navigationBarTitleText": "用户详情",
-        "navigationBarBackgroundColor": "#0f172a",
-        "navigationBarTextStyle": "white"
+        "navigationBarBackgroundColor": "#f7fdff",
+        "navigationBarTextStyle": "black"
       }
     },
     {
       "path": "pages/users/create-user",
       "style": {
         "navigationBarTitleText": "添加用户",
-        "navigationBarBackgroundColor": "#0f172a",
-        "navigationBarTextStyle": "white"
+        "navigationBarBackgroundColor": "#f7fdff",
+        "navigationBarTextStyle": "black"
       }
     },
     {
@@ -60,8 +60,8 @@
       "path": "pages/accounts/create",
       "style": {
         "navigationBarTitleText": "添加账号",
-        "navigationBarBackgroundColor": "#0f172a",
-        "navigationBarTextStyle": "white"
+        "navigationBarBackgroundColor": "#f7fdff",
+        "navigationBarTextStyle": "black"
       }
     },
     {
@@ -82,9 +82,9 @@
     }
   ],
   "tabBar": {
-    "color": "#64748b",
-    "selectedColor": "#2563eb",
-    "backgroundColor": "#ffffff",
+    "color": "#536274",
+    "selectedColor": "#008ee8",
+    "backgroundColor": "#f7fdff",
     "borderStyle": "white",
     "list": [
       {
@@ -122,8 +122,8 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Sub2API Mobile",
-    "navigationBarBackgroundColor": "#ffffff",
-    "backgroundColor": "#f8fafc"
+    "navigationBarBackgroundColor": "#f7fdff",
+    "backgroundColor": "#eaf8ff"
   },
   "condition": {
     "current": 0,

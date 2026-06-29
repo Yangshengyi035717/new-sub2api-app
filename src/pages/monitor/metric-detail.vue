@@ -189,17 +189,17 @@ const chartData = computed(() => ({
   series: [{
     name: metricType.value === 'cost' ? '成本' : '请求',
     data: trendSource.value.map((item) => Number(metricType.value === 'cost' ? item.cost : item.requests) || 0),
-    color: metricType.value === 'errors' ? '#DC2626' : '#2563EB',
+    color: metricType.value === 'errors' ? '#D64F45' : '#008EE8',
   }],
 }));
 const chartOpts = {
-  color: ['#2563EB', '#10B981', '#DC2626'],
+  color: ['#008EE8', '#00AD9D', '#D64F45'],
   padding: [10, 10, 0, 4],
   dataLabel: false,
   dataPointShape: false,
   legend: { show: false },
-  xAxis: { disableGrid: true, fontColor: '#94A3B8', axisLine: false },
-  yAxis: { gridType: 'dash', dashLength: 4, data: [{ fontColor: '#94A3B8' }] },
+  xAxis: { disableGrid: true, fontColor: '#667386', axisLine: false },
+  yAxis: { gridType: 'dash', dashLength: 4, data: [{ fontColor: '#667386' }] },
   extra: {
     column: { type: 'group', width: 18, activeBgOpacity: 0.08 },
     line: { type: 'curve', width: 3, activeType: 'hollow' },
@@ -300,9 +300,9 @@ onPullDownRefresh(() => {
   margin-bottom: 22rpx;
   padding: 32rpx;
   border-radius: 32rpx;
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  box-shadow: 0 8rpx 48rpx rgba(15, 23, 42, 0.05);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(218, 242, 255, 0.72));
+  border: 2rpx solid rgba(0, 151, 216, 0.32);
+  box-shadow: 0 18rpx 54rpx rgba(19, 125, 180, 0.14), inset 0 2rpx 0 rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(12px);
 }
 
@@ -319,7 +319,7 @@ onPullDownRefresh(() => {
 .summary-label,
 .summary-desc {
   display: block;
-  color: #94a3b8;
+  color: #667386;
   font-size: 22rpx;
   line-height: 1.45;
 }
@@ -327,7 +327,7 @@ onPullDownRefresh(() => {
 .detail-value {
   display: block;
   margin-top: 8rpx;
-  color: #1d4ed8;
+  color: #0074d9;
   font-size: 54rpx;
   line-height: 1.1;
   font-weight: 950;
@@ -335,7 +335,7 @@ onPullDownRefresh(() => {
 
 .detail-desc {
   margin-top: 10rpx;
-  color: #475569;
+  color: #2d3a4d;
 }
 
 .detail-mini-stack {
@@ -343,9 +343,9 @@ onPullDownRefresh(() => {
   min-width: 150rpx;
   padding: 18rpx;
   border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(147, 197, 253, 0.6);
-  color: #1d4ed8;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 246, 255, 0.68));
+  border: 2rpx solid rgba(255, 255, 255, 0.86);
+  color: #0074d9;
   font-size: 22rpx;
   font-weight: 850;
   text-align: right;
@@ -372,15 +372,15 @@ onPullDownRefresh(() => {
   min-width: 0;
   padding: 24rpx;
   border-radius: 32rpx;
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  box-shadow: 0 8rpx 48rpx rgba(15, 23, 42, 0.05);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(218, 242, 255, 0.72));
+  border: 2rpx solid rgba(0, 151, 216, 0.32);
+  box-shadow: 0 18rpx 54rpx rgba(19, 125, 180, 0.14), inset 0 2rpx 0 rgba(255, 255, 255, 0.94);
 }
 
 .summary-value {
   display: block;
   margin-top: 8rpx;
-  color: #0f172a;
+  color: #07111f;
   font-size: 36rpx;
   font-weight: 950;
 }
@@ -410,21 +410,21 @@ onPullDownRefresh(() => {
   justify-content: space-between;
   padding: 18rpx 20rpx;
   border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.45);
-  color: #475569;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 246, 255, 0.68));
+  color: #2d3a4d;
   font-size: 24rpx;
   font-weight: 850;
 }
 
 .health-ok {
-  color: #059669;
+  color: #009f8b;
 }
 
 .health-warning {
-  color: #d97706;
+  color: #c98318;
 }
 
 .health-danger {
-  color: #dc2626;
+  color: #d64f45;
 }
 </style>

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <PageShell>
     <HeroHeader title="账号" subtitle="查看账号名称、平台类型、今日用量，并支持测试与暂停/恢复。" eyebrow="Accounts">
       <template #right>
@@ -8,15 +8,16 @@
 
     <SectionCard class="sticky-filter">
       <input v-model="searchText" class="input" placeholder="搜索账号名称 / 平台" @input="handleSearchInput" />
-      <view class="chip-row mt-16">
+      <view class="chip-row">
         <text v-for="item in filterOptions" :key="item.key" class="chip" :class="filter === item.key ? 'chip-active' : ''" @tap="filter = item.key">{{ item.label }}</text>
-      </view>
-      <view class="chip-row mt-16">
-        <text class="chip" :class="usageSort === 'usage-desc' ? 'chip-active' : ''" @tap="usageSort = 'usage-desc'">请求高→低</text>
-        <text class="chip" :class="usageSort === 'usage-asc' ? 'chip-active' : ''" @tap="usageSort = 'usage-asc'">请求低→高</text>
+        <text class="chip usage-chip" :class="usageSort === 'usage-desc' ? 'chip-active' : ''" @tap="usageSort = 'usage-desc'">高→低</text>
+        <text class="chip usage-chip" :class="usageSort === 'usage-asc' ? 'chip-active' : ''" @tap="usageSort = 'usage-asc'">低→高</text>
       </view>
     </SectionCard>
 
+    <NoticeBlock v-if="!hasAccount" title="未连接服务器" text="请先到服务器页完成连接，再查看账号列表。" />
+
+    <template v-if="hasAccount">
     <view class="refresh-line">
       <text>{{ loading ? '正在刷新账号...' : lastLoadedAt ? `最近更新 ${formatDisplayTime(lastLoadedAt)}` : '下拉或点击刷新账号' }}</text>
       <button class="btn btn-ghost btn-small" :disabled="loading" :class="loading ? 'btn-disabled' : ''" @tap="refreshData">刷新</button>
@@ -69,6 +70,8 @@
       </view>
       <NoticeBlock v-else text="当前条件下没有账号。" />
     </view>
+
+    </template>
 
     <view v-if="modelPickerAccount" class="model-sheet-mask" @tap="closeModelPicker">
       <view class="model-sheet" @tap.stop>
@@ -152,6 +155,8 @@ const loadedConfigKey = ref('');
 const modelsByAccountId = ref<Record<number, AccountModelState>>({});
 const modelPickerAccount = ref<AdminAccount | null>(null);
 const modelPickerRunAfterSelect = ref(false);
+
+const hasAccount = computed(() => hasAuthenticatedAdminSession(adminConfigState));
 
 const emptyModelState: AccountModelState = {
   loading: false,
@@ -455,8 +460,9 @@ onPullDownRefresh(() => {
   min-height: 74rpx;
   padding: 0 22rpx;
   border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 246, 255, 0.68));
+  border: 2rpx solid rgba(255, 255, 255, 0.86);
+  box-shadow: inset 0 2rpx 0 rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -467,7 +473,7 @@ onPullDownRefresh(() => {
 
 .model-selector-label {
   flex-shrink: 0;
-  color: #64748b;
+  color: #536274;
   font-size: 22rpx;
   font-weight: 800;
 }
@@ -475,7 +481,7 @@ onPullDownRefresh(() => {
 .model-selector-value {
   flex: 1;
   min-width: 0;
-  color: #0f172a;
+  color: #07111f;
   font-size: 23rpx;
   font-weight: 850;
   text-align: right;
@@ -493,7 +499,7 @@ onPullDownRefresh(() => {
   flex-direction: column;
   justify-content: flex-end;
   padding: 28rpx;
-  background: rgba(15, 23, 42, 0.38);
+  background: rgba(7, 17, 31, 0.34);
 }
 
 .model-sheet {
@@ -501,9 +507,9 @@ onPullDownRefresh(() => {
   max-height: 78vh;
   padding: 28rpx;
   border-radius: 32rpx;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  box-shadow: 0 -18rpx 70rpx rgba(15, 23, 42, 0.12);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(229, 248, 255, 0.88));
+  border: 2rpx solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 -18rpx 70rpx rgba(0, 118, 181, 0.18), inset 0 2rpx 0 rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
@@ -524,7 +530,7 @@ onPullDownRefresh(() => {
 
 .model-sheet-title {
   display: block;
-  color: #0f172a;
+  color: #07111f;
   font-size: 31rpx;
   line-height: 1.25;
   font-weight: 900;
@@ -533,7 +539,7 @@ onPullDownRefresh(() => {
 .model-sheet-subtitle {
   display: block;
   margin-top: 8rpx;
-  color: #64748b;
+  color: #536274;
   font-size: 22rpx;
   line-height: 1.35;
   word-break: break-all;
@@ -552,13 +558,14 @@ onPullDownRefresh(() => {
   margin-bottom: 14rpx;
   padding: 20rpx;
   border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 246, 255, 0.68));
+  border: 2rpx solid rgba(255, 255, 255, 0.86);
+  box-shadow: inset 0 2rpx 0 rgba(255, 255, 255, 0.9);
 }
 
 .model-option-active {
-  background: rgba(37, 99, 235, 0.15);
-  border-color: rgba(147, 197, 253, 0.6);
+  background: linear-gradient(145deg, rgba(218, 244, 255, 0.94), rgba(255, 255, 255, 0.76));
+  border-color: rgba(0, 151, 216, 0.36);
 }
 
 .model-option-copy {
@@ -568,7 +575,7 @@ onPullDownRefresh(() => {
 
 .model-option-title {
   display: block;
-  color: #0f172a;
+  color: #07111f;
   font-size: 25rpx;
   line-height: 1.3;
   font-weight: 850;
@@ -578,7 +585,7 @@ onPullDownRefresh(() => {
 .model-option-subtitle {
   display: block;
   margin-top: 6rpx;
-  color: #64748b;
+  color: #536274;
   font-size: 20rpx;
   line-height: 1.3;
   word-break: break-all;
@@ -586,14 +593,14 @@ onPullDownRefresh(() => {
 
 .model-option-check {
   flex-shrink: 0;
-  color: #2563eb;
+  color: #008ee8;
   font-size: 22rpx;
   font-weight: 900;
 }
 
 .model-empty {
   padding: 28rpx 8rpx;
-  color: #64748b;
+  color: #536274;
   font-size: 24rpx;
   line-height: 1.45;
   text-align: center;
@@ -602,7 +609,7 @@ onPullDownRefresh(() => {
 .error-line {
   display: block;
   margin-top: 12rpx;
-  color: #b91c1c;
+  color: #c84942;
   font-size: 23rpx;
   line-height: 1.4;
 }

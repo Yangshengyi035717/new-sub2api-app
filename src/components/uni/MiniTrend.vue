@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<{
   points: Array<{ label: string; value: number }>;
   color?: string;
 }>(), {
-  color: '#2563eb',
+  color: '#008ee8',
 });
 
 const normalizedPoints = computed(() => {
