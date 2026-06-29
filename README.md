@@ -2,6 +2,13 @@
 
 [English](README.md) | [中文](README.zh-CN.md)
 
+<img width="670" height="936" alt="1782579122104 jpg" src="https://github.com/user-attachments/assets/3f6a7eb5-38ca-436a-9e1d-825b3a196cb0" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-42-216_io H565806EC" src="https://github.com/user-attachments/assets/90b9a29c-849c-4cf5-a880-5ebda2a72977" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-34-532_io H565806EC" src="https://github.com/user-attachments/assets/146c0936-def7-41ef-9a11-deeed52ffa74" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-52-477_io H565806EC" src="https://github.com/user-attachments/assets/7e5a542b-c770-449d-bd7a-7e3958a531d4" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-48-605_io H565806EC" src="https://github.com/user-attachments/assets/bfb4ddfa-60ed-448e-958d-a64941ede45b" />
+<img width="1200" height="2670" alt="Screenshot_2026-06-29-18-20-45-839_io H565806EC" src="https://github.com/user-attachments/assets/4e2bdd8a-e9fb-4fc7-9e1a-bb3d67cf05b3" />
+
 Sub2API Mobile Admin is a uni-app CLI + Vue 3 mobile administration console for Sub2API operations. It keeps the existing admin workflows while providing H5 and App builds with a blue-white glassmorphism dashboard style.
 
 ## Features
