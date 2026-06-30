@@ -16,6 +16,7 @@ The rebuilt app covers:
 - Account list, sticky filters, usage sorting, JSON import, batch group assignment, test model selection, account testing, and schedulable pause/resume.
 - Account creation.
 - Group list with sticky search and quota/limit fields.
+- Announcement management, including mobile list/create/edit/delete, status, notification mode, time window, and targeting conditions compatible with the PC admin API.
 - Server settings page for adding, validating, switching, and deleting admin endpoints.
 
 ## Runtime Behavior
@@ -29,6 +30,7 @@ The rebuilt app covers:
 - Account testing supports Sub2API test endpoints that return normal JSON or `text/event-stream` streaming responses.
 - Account testing now recognizes `stream disconnected before completion: stream closed before response.completed` as a streaming test disconnect and shows a retry/change-model message instead of a raw transport error.
 - Account JSON import submits to `/api/v1/admin/accounts/data`; on App, file selection depends on runtime file picker support, and the page now falls back to pasted JSON when the system picker is unavailable.
+- Announcement management uses `/api/v1/admin/announcements` and supports the same core fields as the PC admin dialog: `title`, Markdown `content`, `status`, `notify_mode`, `starts_at`, `ends_at`, and `targeting.any_of`.
 - The App build avoids browser-only APIs in the main uni-app flow to reduce blank-page risk on Android WebView/JSCore runtimes.
 
 ## Run H5
@@ -99,7 +101,7 @@ The local CLI build produces App runtime resources. To generate a production And
 Current local APK output:
 
 ```text
-dist/local-apk/sub2api-mobile-local-batch-import-2.1.6.apk
+dist/local-apk/sub2api-mobile-local-announcements-2.1.7.apk
 ```
 
 Local APK identity:
@@ -107,8 +109,8 @@ Local APK identity:
 ```text
 appid: __UNI__H565806EC
 android package: io.H565806EC
-versionName: 2.1.6
-versionCode: 216
+versionName: 2.1.7
+versionCode: 217
 signing: HBuilderX app-safe-pack Test.keystore / debug test certificate
 android label: Sub2API Mobile
 ```
@@ -116,7 +118,7 @@ android label: Sub2API Mobile
 Packaging steps used for the local APK:
 
 - Run `npm run build:app` to generate `dist/build/app`.
-- Use the previous local Android base package that already carries `versionName/versionCode` `2.1.6 / 216` and `dcloud_control.xml` `appver` `2.1.6`.
+- Use the previous local Android base package that already carries `versionName/versionCode` `2.1.6 / 216` and `dcloud_control.xml` `appver` `2.1.6`, then update the rebuilt package metadata to `2.1.7 / 217` and `appver` `2.1.7`.
 - Replace `assets/apps/__UNI__H565806EC/www` in the APK with the latest `dist/build/app` resources.
 - Remove old `META-INF` signatures from the rebuilt APK archive.
 - Align with HBuilderX bundled `zipalign`.
@@ -126,8 +128,9 @@ Validation:
 
 - `zipalign -c -p 4`: passed.
 - `apksigner verify --verbose`: passed; v1/v2 are both true.
-- APK internal uni-app manifest: `2.1.6 / 216`.
+- APK internal uni-app manifest: `2.1.7 / 217`.
 - APK internal `compilerVersion`: `5.13`.
+- APK content check confirms announcement routes and `/api/v1/admin/announcements` are present in `app-service.js`.
 
 Install note: because this APK uses a local debug/test certificate, uninstall any previously installed cloud-packaged APK first if Android reports a signature conflict.
 
@@ -150,7 +153,7 @@ git lfs pull
 本地 APK 路径：
 
 ```text
-dist/local-apk/sub2api-mobile-local-batch-import-2.1.6.apk
+dist/local-apk/sub2api-mobile-local-announcements-2.1.7.apk
 ```
 
 该 APK 使用 HBuilderX 测试证书签名，适合本地安装验证；正式发布请使用生产证书或 HBuilderX 云打包。

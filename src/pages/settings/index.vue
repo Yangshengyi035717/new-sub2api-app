@@ -26,6 +26,16 @@
       </view>
     </SectionCard>
 
+    <SectionCard title="管理工具" subtitle="复用 PC 端管理能力，适合在手机上快速维护运营配置。">
+      <view class="tool-card" @tap="goAnnouncements">
+        <view class="flex-1">
+          <text class="list-title">公告管理</text>
+          <text class="list-meta">创建、编辑和发布面向用户的公告，支持弹窗提醒、展示时间和条件展示。</text>
+        </view>
+        <text class="badge">进入</text>
+      </view>
+    </SectionCard>
+
     <SectionCard title="服务器列表" :subtitle="adminConfigState.accounts.length ? '点击卡片可切换当前管理对象。' : '还没有服务器，先添加一个连接。'">
       <view v-if="adminConfigState.accounts.length">
         <view v-for="account in adminConfigState.accounts" :key="account.id" class="list-card server-card" :class="account.id === adminConfigState.activeAccountId ? 'server-card-active' : ''">
@@ -131,6 +141,10 @@ async function handleDelete(accountId: string) {
     },
   });
 }
+
+function goAnnouncements() {
+  uni.navigateTo({ url: '/pages/announcements/index' });
+}
 </script>
 
 <style scoped>
@@ -148,5 +162,17 @@ async function handleDelete(accountId: string) {
 .server-card-active {
   border-color: rgba(0, 151, 216, 0.5);
   background: linear-gradient(145deg, rgba(231, 249, 255, 0.96), rgba(255, 255, 255, 0.78));
+}
+
+.tool-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18rpx;
+  padding: 26rpx;
+  border-radius: 30rpx;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(226, 246, 255, 0.68));
+  border: 2rpx solid rgba(255, 255, 255, 0.86);
+  box-shadow: inset 0 2rpx 0 rgba(255, 255, 255, 0.9);
 }
 </style>

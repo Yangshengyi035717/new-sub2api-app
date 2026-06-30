@@ -574,3 +574,37 @@
 - Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-batch-import-2.1.6.apk`.
 - Signing: used the HBuilderX bundled `Test.keystore` test certificate for local installation validation; production release must use a production certificate.
 - Rollback: revert `src/manifest.json`, `docs/UNIAPP_H5_REBUILD.md`, and this appended `progress.md` entry, then delete `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-batch-import-2.1.6.apk`.
+
+
+## 2026-06-30 - Task: Add mobile announcement management and package Android APK 2.1.7
+### What was done
+- Added a mobile announcement management entry under the server/settings page instead of adding another bottom tab, keeping navigation lightweight.
+- Implemented announcement list, search, status filter, create/edit form, delete action, status selection, silent/popup notification mode, optional start/end time, and PC-compatible targeting conditions.
+- Added typed admin service calls for `/api/v1/admin/announcements` CRUD and bumped the App version to `2.1.7 / 217`.
+- Rebuilt H5/App resources and repacked the local Android APK with the announcement pages.
+- Updated docs and README to document the new announcement capability and current APK output.
+
+### Testing
+- `npm run build:h5`: passed; H5 build completed successfully.
+- `npm run build:app`: passed; App build completed successfully and `scripts/fix-app-runtime-version.cjs` normalized App Runtime `compilerVersion` to `5.13`.
+- `zipalign -c -p 4 dist/local-apk/sub2api-mobile-local-announcements-2.1.7.apk`: passed.
+- `apksigner verify --verbose dist/local-apk/sub2api-mobile-local-announcements-2.1.7.apk`: passed; v1/v2 are both true.
+- APK content check: internal uni-app manifest is `2.1.7 / 217`; `compilerVersion` is `5.13`; `dcloud_control.xml` appver is `2.1.7`; native `apktool.yml` reports `versionCode: 217` and `versionName: 2.1.7`; `app-service.js` contains `/api/v1/admin/announcements`, `pages/announcements/index`, `notify_mode`, and `targeting`.
+- `git diff --check`: passed; only existing Windows line-ending warnings were reported.
+
+### Notes
+- Modified files:
+  - `src/pages/announcements/index.vue`: added the mobile announcement list, filters, refresh, edit navigation, and delete flow.
+  - `src/pages/announcements/edit.vue`: added the PC-compatible announcement create/edit form with status, notify mode, time window, and targeting conditions.
+  - `src/pages/settings/index.vue`: added the announcement management entry under server management tools.
+  - `src/pages.json`: registered the announcement list and edit routes.
+  - `src/services/admin.ts`: added announcement CRUD calls for `/api/v1/admin/announcements`.
+  - `src/types/admin.ts`: added announcement, targeting, and request types.
+  - `src/manifest.json`: bumped App version to `2.1.7 / 217`.
+  - `README.zh-CN.md`: documented the announcement management feature.
+  - `docs/UNIAPP_H5_REBUILD.md`: documented announcement behavior and the current APK package.
+  - `progress.md`: records this implementation, validation, and rollback point.
+  - `dist/local-apk/sub2api-mobile-local-announcements-2.1.7.apk`: generated the installable local Android APK.
+- Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-announcements-2.1.7.apk`.
+- Signing: used the HBuilderX bundled `Test.keystore` test certificate for local installation validation; production release must use a production certificate.
+- Rollback: revert the listed source/docs files and this appended `progress.md` entry, then delete `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-announcements-2.1.7.apk`.

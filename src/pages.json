@@ -73,6 +73,22 @@
       }
     },
     {
+      "path": "pages/announcements/index",
+      "style": {
+        "navigationBarTitleText": "公告",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/announcements/edit",
+      "style": {
+        "navigationBarTitleText": "编辑公告",
+        "navigationBarBackgroundColor": "#f7fdff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
       "path": "pages/settings/index",
       "style": {
         "navigationBarTitleText": "服务器",

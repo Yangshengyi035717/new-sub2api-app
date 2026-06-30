@@ -172,6 +172,73 @@ export type AdminGroup = {
   updated_at?: string;
 };
 
+export type AnnouncementStatus = 'draft' | 'active' | 'archived';
+
+export type AnnouncementNotifyMode = 'silent' | 'popup';
+
+export type AnnouncementConditionType = 'subscription' | 'balance';
+
+export type AnnouncementOperator = 'in' | 'gt' | 'gte' | 'lt' | 'lte' | 'eq';
+
+export type AnnouncementCondition = {
+  type: AnnouncementConditionType;
+  operator: AnnouncementOperator;
+  group_ids?: number[];
+  value?: number;
+};
+
+export type AnnouncementConditionGroup = {
+  all_of?: AnnouncementCondition[];
+};
+
+export type AnnouncementTargeting = {
+  any_of?: AnnouncementConditionGroup[];
+};
+
+export type AdminAnnouncement = {
+  id: number;
+  title: string;
+  content: string;
+  status: AnnouncementStatus | string;
+  notify_mode: AnnouncementNotifyMode | string;
+  targeting?: AnnouncementTargeting;
+  starts_at?: string | null;
+  ends_at?: string | null;
+  created_by?: number | null;
+  updated_by?: number | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type AnnouncementListParams = {
+  search?: string;
+  status?: string;
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+};
+
+export type CreateAnnouncementRequest = {
+  title: string;
+  content: string;
+  status?: AnnouncementStatus;
+  notify_mode?: AnnouncementNotifyMode;
+  targeting?: AnnouncementTargeting;
+  starts_at?: number;
+  ends_at?: number;
+};
+
+export type UpdateAnnouncementRequest = {
+  title?: string;
+  content?: string;
+  status?: AnnouncementStatus;
+  notify_mode?: AnnouncementNotifyMode;
+  targeting?: AnnouncementTargeting;
+  starts_at?: number;
+  ends_at?: number;
+};
+
 
 export type AccountListParams = {
   search?: string;

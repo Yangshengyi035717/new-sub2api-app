@@ -2,12 +2,14 @@ import { adminFetch } from '@/services/admin-fetch';
 import type {
   AccountListParams,
   AccountBulkUpdateResult,
+  AnnouncementListParams,
   AdminDataImportResult,
   AdminDataPayload,
   AccountTodayStats,
   AccountTestResult,
   AccountModelOption,
   AdminAccount,
+  AdminAnnouncement,
   AdminApiKey,
   AdminGroup,
   AdminSettings,
@@ -18,8 +20,10 @@ import type {
   DashboardStats,
   DashboardTrend,
   CreateAccountRequest,
+  CreateAnnouncementRequest,
   CreateUserRequest,
   PaginatedData,
+  UpdateAnnouncementRequest,
   UsageStats,
   UserUsageSummary,
 } from '@/types/admin';
@@ -138,6 +142,41 @@ export function updateUserStatus(userId: number, status: 'active' | 'disabled') 
 
 export function listGroups(search = '', page = 1, pageSize = 20) {
   return adminFetch<PaginatedData<AdminGroup>>(`/api/v1/admin/groups${buildQuery({ page, page_size: pageSize, search: search.trim() })}`);
+}
+
+export function listAnnouncements(params: AnnouncementListParams = {}) {
+  return adminFetch<PaginatedData<AdminAnnouncement>>(`/api/v1/admin/announcements${buildQuery({
+    page: params.page ?? 1,
+    page_size: params.pageSize ?? 20,
+    search: params.search?.trim(),
+    status: params.status,
+    sort_by: params.sortBy ?? 'created_at',
+    sort_order: params.sortOrder ?? 'desc',
+  })}`);
+}
+
+export function getAnnouncement(announcementId: number) {
+  return adminFetch<AdminAnnouncement>(`/api/v1/admin/announcements/${announcementId}`);
+}
+
+export function createAnnouncement(body: CreateAnnouncementRequest) {
+  return adminFetch<AdminAnnouncement>('/api/v1/admin/announcements', {
+    method: 'POST',
+    data: body,
+  });
+}
+
+export function updateAnnouncement(announcementId: number, body: UpdateAnnouncementRequest) {
+  return adminFetch<AdminAnnouncement>(`/api/v1/admin/announcements/${announcementId}`, {
+    method: 'PUT',
+    data: body,
+  });
+}
+
+export function deleteAnnouncement(announcementId: number) {
+  return adminFetch<{ message: string }>(`/api/v1/admin/announcements/${announcementId}`, {
+    method: 'DELETE',
+  });
 }
 
 export function listAccounts(params: string | AccountListParams = '') {
