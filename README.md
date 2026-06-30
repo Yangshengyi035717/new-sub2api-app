@@ -11,6 +11,8 @@
 
 Sub2API Mobile Admin is a uni-app CLI + Vue 3 mobile administration console for Sub2API operations. It keeps the existing admin workflows while providing H5 and App builds with a blue-white glassmorphism dashboard style.
 
+Upstream open-source project: [Wei-Shaw/sub2api](https://github.com/Wei-Shaw/sub2api)
+
 ## Features
 
 - Admin server login with multiple saved server profiles.
@@ -145,6 +147,7 @@ docs/                               implementation and operation docs
 
 ## Related Docs
 
+- [Upstream Sub2API project](https://github.com/Wei-Shaw/sub2api)
 - [中文说明](README.zh-CN.md)
 - [Uni-app H5 rebuild notes](docs/UNIAPP_H5_REBUILD.md)
 - [Local proxy setup](docs/LOCAL_PROXY_SETUP.md)

@@ -1,4 +1,4 @@
-﻿export type ApiEnvelope<T> = {
+export type ApiEnvelope<T> = {
   code: number;
   message: string;
   reason?: string;
@@ -172,6 +172,46 @@ export type AdminGroup = {
   updated_at?: string;
 };
 
+
+export type AccountListParams = {
+  search?: string;
+  page?: number;
+  pageSize?: number;
+  platform?: string;
+  type?: string;
+  status?: string;
+  privacy?: string;
+  groupId?: number | string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+};
+
+export type AdminDataPayload = Record<string, unknown>;
+
+export type AdminDataImportError = {
+  kind: 'proxy' | 'account';
+  name?: string;
+  proxy_key?: string;
+  message: string;
+};
+
+export type AdminDataImportResult = {
+  proxy_created: number;
+  proxy_reused: number;
+  proxy_failed: number;
+  account_created: number;
+  account_failed: number;
+  errors?: AdminDataImportError[];
+};
+
+export type AccountBulkUpdateResult = {
+  success?: number;
+  total?: number;
+  failed?: number;
+  errors?: Array<{ id?: number; message?: string }>;
+  [key: string]: unknown;
+};
+
 export type AccountTodayStats = {
   requests: number;
   tokens: number;
@@ -205,9 +245,12 @@ export type AdminAccount = {
   current_concurrency?: number;
   rate_multiplier?: number;
   error_message?: string;
+  is_private?: boolean;
+  privacy?: string;
   updated_at?: string;
   last_used_at?: string | null;
   rate_limit_reset_at?: string | null;
+  temp_unschedulable_until?: string | null;
   group_ids?: number[];
   groups?: AdminGroup[];
   extra?: Record<string, unknown>;

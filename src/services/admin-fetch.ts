@@ -14,6 +14,8 @@ type UniRequestResponse = {
   header?: unknown;
 };
 
+const STREAM_DISCONNECTED_ERROR = 'ACCOUNT_TEST_STREAM_DISCONNECTED';
+
 function buildRequestUrl(baseUrl: string, path: string) {
   const normalizedBase = baseUrl.trim().replace(/\/$/, '');
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
@@ -75,10 +77,35 @@ function parseJsonResponse<T>(data: unknown): ApiEnvelope<T> | undefined {
   return data as ApiEnvelope<T>;
 }
 
+function pickMessage(value: unknown): string {
+  if (typeof value === 'string') return value.trim();
+  if (!value || typeof value !== 'object' || (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer)) return '';
+
+  const record = value as Record<string, unknown>;
+  const candidates = [record.message, record.reason, record.error, record.content, record.text];
+
+  for (const candidate of candidates) {
+    const message = pickMessage(candidate);
+    if (message) return message;
+  }
+
+  return '';
+}
+
 function getMessageFromEvent(event: Record<string, unknown>) {
-  const candidates = [event.message, event.reason, event.error, event.content, event.text];
-  const value = candidates.find((item) => typeof item === 'string' && item.trim());
-  return typeof value === 'string' ? value.trim() : '';
+  return pickMessage(event);
+}
+
+function isStreamDisconnectedBeforeCompletion(message: string) {
+  return /stream disconnected before completion|stream closed before response\.completed/i.test(message);
+}
+
+function streamDisconnectedResult() {
+  return {
+    ok: false,
+    message: '流式测试连接在 response.completed 前提前断开，请重试或更换测试模型。',
+    eventType: STREAM_DISCONNECTED_ERROR,
+  };
 }
 
 function parseEventStream(text: string) {
@@ -99,9 +126,14 @@ function parseEventStream(text: string) {
   const lastEvent = events[events.length - 1] || {};
   const eventType = typeof lastEvent.type === 'string' ? lastEvent.type : '';
   const message = getMessageFromEvent(lastEvent);
+  const streamDisconnectedMessage = events.map(getMessageFromEvent).find(isStreamDisconnectedBeforeCompletion);
   const model = typeof lastEvent.model === 'string' ? lastEvent.model : '';
   const isFailed = /fail|error/i.test(eventType) || lastEvent.success === false;
   const isFinished = /success|done|complete|finish/i.test(eventType) || lastEvent.success === true;
+
+  if (streamDisconnectedMessage) {
+    return streamDisconnectedResult();
+  }
 
   if (isFailed) {
     return {
@@ -130,6 +162,9 @@ function normalizeRequestError(error: unknown) {
   const message = error instanceof Error ? error.message : typeof error === 'string' ? error : responseToText(error);
   if (/timeout|timed out/i.test(message)) {
     return new Error('REQUEST_TIMEOUT');
+  }
+  if (isStreamDisconnectedBeforeCompletion(message)) {
+    return new Error(STREAM_DISCONNECTED_ERROR);
   }
   return new Error(message || 'NETWORK_REQUEST_FAILED');
 }
@@ -176,6 +211,10 @@ export async function adminFetch<T>(path: string, init: UniApp.RequestOptions = 
   const contentType = getHeaderValue(response.header, 'content-type').toLowerCase();
   const rawText = responseToText(response.data);
 
+  if (options?.acceptEventStream && isStreamDisconnectedBeforeCompletion(rawText)) {
+    throw new Error(STREAM_DISCONNECTED_ERROR);
+  }
+
   if (options?.acceptEventStream && (contentType.includes('text/event-stream') || rawText.trim().startsWith('data:'))) {
     const streamResult = parseEventStream(rawText);
     if (statusCode >= 200 && statusCode < 300 && streamResult.ok) {
@@ -196,7 +235,12 @@ export async function adminFetch<T>(path: string, init: UniApp.RequestOptions = 
   }
 
   if (statusCode < 200 || statusCode >= 300 || json.code !== 0) {
-    throw new Error(json.reason || json.message || 'REQUEST_FAILED');
+    const responseError = pickMessage((json as Record<string, unknown>).error);
+    const responseMessage = [json.reason, json.message, responseError].find((item) => typeof item === 'string' && item.trim()) || '';
+    if (options?.acceptEventStream && responseMessage && isStreamDisconnectedBeforeCompletion(responseMessage)) {
+      throw new Error(STREAM_DISCONNECTED_ERROR);
+    }
+    throw new Error(json.reason || json.message || responseError || 'REQUEST_FAILED');
   }
 
   return json.data as T;

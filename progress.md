@@ -410,3 +410,167 @@
   - `docs/UNIAPP_H5_REBUILD.md`：清理乱码段落并重写构建/打包说明。
   - `progress.md`：追加本轮修复记录。
 - Rollback: 使用 Git 回滚上述文档文件即可。
+
+
+## 2026-06-30 - Task: Add PC-style account filters and upstream project link
+### What was done
+- Expanded the account page filters to match the PC categories: search, platform, type, status, privacy, and group.
+- Added backend pagination support to the account list and used the backend `total` value for the all-account count.
+- Added loaded count, page label, and load-more behavior so mobile users are not limited to the first account page.
+- Added the upstream project link `https://github.com/Wei-Shaw/sub2api` to project documentation.
+
+### Testing
+- `npm run build:h5`: passed; H5 build completed successfully.
+- `npm run build:app`: passed; App build completed successfully and `compilerVersion` was normalized to `5.13`.
+- App output check: `app-service.js` includes account filter markers for privacy and group filtering.
+- Documentation check: `README.md`, `README.zh-CN.md`, and `docs/UNIAPP_H5_REBUILD.md` include `Wei-Shaw/sub2api`.
+
+### Notes
+- Modified files:
+  - `src/pages/accounts/index.vue`: added platform, type, status, privacy, and group filters plus total, loaded count, page label, and load-more UI.
+  - `src/services/admin.ts`: added account list pagination/filter parameters and group list page-size support.
+  - `src/types/admin.ts`: added `AccountListParams` and account privacy fields.
+  - `README.md`: added the upstream project link.
+  - `README.zh-CN.md`: added the upstream project link.
+  - `docs/UNIAPP_H5_REBUILD.md`: added the upstream project link.
+  - `progress.md`: restored this progress record.
+- Rollback: use Git to revert the files listed above.
+
+## 2026-06-30 - Task: Package account-filter Android APK 2.1.4
+### What was done
+- Bumped the App version to `2.1.4 / 214` for the account-filter build.
+- Rebuilt `dist/build/app` with `npm run build:app` and normalized App Runtime `compilerVersion`.
+- Repacked the Android APK from `dist/local-apk/sub2api-mobile-local-guard-groups-2.1.3.apk` by replacing `assets/apps/__UNI__H565806EC/www` with the latest App resources.
+- Synced native APK version, internal uni-app manifest version, and `dcloud_control.xml` appver, then aligned and signed the local APK.
+
+### Testing
+- `npm run build:app`: passed; App build completed successfully and `compilerVersion` was normalized to `5.13`.
+- `zipalign -c -p 4 dist/local-apk/sub2api-mobile-local-filters-2.1.4.apk`: passed.
+- `apksigner verify --verbose dist/local-apk/sub2api-mobile-local-filters-2.1.4.apk`: passed; v1/v2 are both true.
+- APK content check: native `versionName: 2.1.4`, `versionCode: 214`; internal uni-app manifest `2.1.4 / 214`; `dcloud_control.xml` appver `2.1.4`; `app-service.js` includes account pagination and filter markers.
+
+### Notes
+- Modified files:
+  - `src/manifest.json`: bumped App version to `2.1.4 / 214`.
+  - `docs/UNIAPP_H5_REBUILD.md`: updated the local APK path and version notes.
+  - `progress.md`: restored this APK packaging record.
+  - `dist/local-apk/sub2api-mobile-local-filters-2.1.4.apk`: generated the installable local Android APK.
+- Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-filters-2.1.4.apk`.
+- Signing: used the HBuilderX bundled `Test.keystore` test certificate for local installation validation; production release must use a production certificate.
+- Rollback: use Git to revert `src/manifest.json`, `docs/UNIAPP_H5_REBUILD.md`, and `progress.md`; delete `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-filters-2.1.4.apk`; use `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-guard-groups-2.1.3.apk` if the previous package is needed.
+
+## 2026-06-30 - Task: Fix Android APK Chinese text and package 2.1.5
+### What was done
+- Fixed static account-page Chinese text that appeared as `??` / `????` after packaging.
+- Bumped the App version to `2.1.5 / 215` to distinguish it from the previous garbled-text APK.
+- Rebuilt App resources and replaced `assets/apps/__UNI__H565806EC/www` inside the APK with the latest `dist/build/app` resources.
+- Realigned and resigned the Android APK as `dist/local-apk/sub2api-mobile-local-filters-cnfix-2.1.5.apk`.
+
+### Testing
+- `npm run build:app`: passed; App resource build completed successfully and `compilerVersion` was normalized to `5.13`.
+- Source check: `src/pages/accounts/index.vue` no longer contains `??Privacy` or blocks of question-mark UI copy.
+- App output check: `dist/build/app/app-service.js` includes account-page Chinese markers and does not contain `??Privacy` / `????`.
+- APK content check: final APK `app-service.js` includes the expected text markers and does not contain `??Privacy` / `????`; internal uni-app manifest is `2.1.5 / 215`; `dcloud_control.xml` appver is `2.1.5`.
+- `zipalign -c -p 4 dist/local-apk/sub2api-mobile-local-filters-cnfix-2.1.5.apk`: passed.
+- `apksigner verify --verbose dist/local-apk/sub2api-mobile-local-filters-cnfix-2.1.5.apk`: passed; v1/v2 are both true.
+
+### Notes
+- Modified files:
+  - `src/pages/accounts/index.vue`: restored account-page Chinese UI copy and changed the model picker entry label to the test-model wording.
+  - `src/manifest.json`: bumped App version to `2.1.5 / 215`.
+  - `docs/UNIAPP_H5_REBUILD.md`: updated the current APK path, version, and local repack/signing steps.
+  - `progress.md`: restored this garbled-text fix and APK packaging record.
+  - `dist/local-apk/sub2api-mobile-local-filters-cnfix-2.1.5.apk`: generated the installable local Android APK.
+- Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-filters-cnfix-2.1.5.apk`.
+- Signing: used the HBuilderX bundled `Test.keystore` test certificate for local installation validation; production release must use a production certificate.
+- Rollback: use Git to revert `src/pages/accounts/index.vue`, `src/manifest.json`, `docs/UNIAPP_H5_REBUILD.md`, and `progress.md`; delete `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-filters-cnfix-2.1.5.apk`; use `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-filters-2.1.4.apk` if the previous package is needed.
+
+## 2026-06-30 - Task: Fix account test streaming disconnect message
+### What was done
+- Added explicit handling for account-test streaming disconnects containing `stream disconnected before completion: stream closed before response.completed`.
+- Converted that case to a stable account-test error code/message so the UI asks the operator to retry or switch test model instead of showing the raw transport error.
+- Covered SSE `data:` payloads, plain text bodies, JSON error fields, and request-level exceptions for the same disconnect signature.
+- Updated the H5/App rebuild notes with the streaming disconnect behavior.
+
+### Testing
+- `npm run build:h5`: passed; H5 build completed successfully.
+- `npm run build:app`: passed; App build completed successfully and `scripts/fix-app-runtime-version.cjs` normalized App Runtime `compilerVersion` to `5.13`.
+- `git diff --check`: passed; only existing Windows line-ending warnings were reported.
+
+### Notes
+- Modified files:
+  - `src/services/admin-fetch.ts`: handles `response.completed` pre-completion streaming disconnects across SSE, text, JSON error, and request exception paths.
+  - `src/utils/format.ts`: adds the user-facing account-test streaming disconnect message.
+  - `docs/UNIAPP_H5_REBUILD.md`: documents the account-test streaming disconnect behavior.
+  - `progress.md`: records this fix, validation, and rollback point.
+- Rollback: use Git to revert `src/services/admin-fetch.ts`, `src/utils/format.ts`, `docs/UNIAPP_H5_REBUILD.md`, and this appended `progress.md` entry.
+
+
+## 2026-06-30 - Task: Package stream-disconnect fix Android APK 2.1.5
+### What was done
+- Repacked the Android APK after the account-test streaming disconnect fix so the installable package includes the latest App resources.
+- Used `dist/local-apk/sub2api-mobile-local-verified-2.1.5.apk` as the native base package and replaced `assets/apps/__UNI__H565806EC/www` with the rebuilt `dist/build/app` resources.
+- Aligned and signed the APK with the HBuilderX bundled local test certificate.
+- Updated the H5/App rebuild notes to point to the stream-fix APK.
+
+### Testing
+- `zipalign -c -p 4 dist/local-apk/sub2api-mobile-local-streamfix-2.1.5.apk`: passed.
+- `apksigner verify --verbose dist/local-apk/sub2api-mobile-local-streamfix-2.1.5.apk`: passed; v1/v2 are both true.
+- APK content check: `app-service.js` contains `ACCOUNT_TEST_STREAM_DISCONNECTED` and `response.completed`; internal uni-app manifest is `2.1.5 / 215`; `compilerVersion` is `5.13`; `dcloud_control.xml` appver is `2.1.5`.
+
+### Notes
+- Modified files:
+  - `docs/UNIAPP_H5_REBUILD.md`: updated the current local APK path to the stream-fix package.
+  - `progress.md`: records this APK packaging, validation, and rollback point.
+  - `dist/local-apk/sub2api-mobile-local-streamfix-2.1.5.apk`: generated the installable local Android APK containing the stream-disconnect fix.
+- Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-streamfix-2.1.5.apk`.
+- Signing: used the HBuilderX bundled `Test.keystore` test certificate for local installation validation; production release must use a production certificate.
+- Rollback: revert `docs/UNIAPP_H5_REBUILD.md` and this appended `progress.md` entry, then delete `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-streamfix-2.1.5.apk`.
+
+
+## 2026-06-30 - Task: Fix account JSON import fallback and add batch grouping
+### What was done
+- Checked the account JSON import flow and confirmed the upload/import request already exists; the weak point was App-side file selection and reading, not the backend import action.
+- Hardened JSON file import on App by avoiding direct `File` access when the App runtime has no browser `File` object, handling `tempFilePaths`, and showing a clear paste-JSON fallback when the system file picker is unavailable.
+- Added account batch-selection mode on the account page, including select-current-list, clear selection, target group picker, and batch group assignment.
+- Added `bulkUpdateAccounts` service support for `/api/v1/admin/accounts/bulk-update` with selected account IDs and target `group_ids`.
+- Updated rebuild documentation with JSON import fallback and batch grouping behavior.
+
+### Testing
+- `npm run build:h5`: passed; H5 build completed successfully.
+- `npm run build:app`: passed; App build completed successfully and `scripts/fix-app-runtime-version.cjs` normalized App Runtime `compilerVersion` to `5.13`.
+
+### Notes
+- Modified files:
+  - `src/pages/accounts/index.vue`: fixed App JSON file selection fallback and added batch account selection/group assignment UI.
+  - `src/services/admin.ts`: added `bulkUpdateAccounts` for account batch updates.
+  - `src/types/admin.ts`: added `AccountBulkUpdateResult` for the batch update response.
+  - `docs/UNIAPP_H5_REBUILD.md`: documented JSON import fallback and batch grouping support.
+  - `progress.md`: records this fix, validation, and rollback point.
+- Rollback: use Git to revert `src/pages/accounts/index.vue`, `src/services/admin.ts`, `src/types/admin.ts`, `docs/UNIAPP_H5_REBUILD.md`, and this appended `progress.md` entry.
+
+
+## 2026-06-30 - Task: Package Android APK 2.1.6 and prepare push
+### What was done
+- Bumped the App version to `2.1.6 / 216` for the JSON-import fallback and batch-grouping build.
+- Rebuilt H5 and App resources, then repacked the local Android APK with the latest `dist/build/app` resources.
+- Used apktool no-source decode/rebuild to preserve the native dex files while updating app resources, native version, internal uni-app manifest, and `dcloud_control.xml` appver.
+- Aligned and signed the installable APK with the HBuilderX bundled local test certificate.
+- Updated rebuild documentation to point to the `2.1.6` APK.
+
+### Testing
+- `npm run build:h5`: passed; H5 build completed successfully.
+- `npm run build:app`: passed; App build completed successfully and `scripts/fix-app-runtime-version.cjs` normalized App Runtime `compilerVersion` to `5.13`.
+- `zipalign -c -p 4 dist/local-apk/sub2api-mobile-local-batch-import-2.1.6.apk`: passed.
+- `apksigner verify --verbose dist/local-apk/sub2api-mobile-local-batch-import-2.1.6.apk`: passed; v1/v2 are both true.
+- APK content check: `app-service.js` contains `bulk-update`, `tempFilePaths`, `group_ids`, and `ACCOUNT_TEST_STREAM_DISCONNECTED`; internal uni-app manifest is `2.1.6 / 216`; `compilerVersion` is `5.13`; `dcloud_control.xml` appver is `2.1.6`; native `apktool.yml` reports `versionCode: 216` and `versionName: 2.1.6`.
+
+### Notes
+- Modified files:
+  - `src/manifest.json`: bumped App version to `2.1.6 / 216`.
+  - `docs/UNIAPP_H5_REBUILD.md`: updated the current APK path, version, and package notes.
+  - `progress.md`: records this packaging, validation, and rollback point.
+  - `dist/local-apk/sub2api-mobile-local-batch-import-2.1.6.apk`: generated the installable local Android APK.
+- Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-batch-import-2.1.6.apk`.
+- Signing: used the HBuilderX bundled `Test.keystore` test certificate for local installation validation; production release must use a production certificate.
+- Rollback: revert `src/manifest.json`, `docs/UNIAPP_H5_REBUILD.md`, and this appended `progress.md` entry, then delete `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-batch-import-2.1.6.apk`.

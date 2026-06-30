@@ -1,5 +1,9 @@
 import { adminFetch } from '@/services/admin-fetch';
 import type {
+  AccountListParams,
+  AccountBulkUpdateResult,
+  AdminDataImportResult,
+  AdminDataPayload,
   AccountTodayStats,
   AccountTestResult,
   AccountModelOption,
@@ -132,12 +136,45 @@ export function updateUserStatus(userId: number, status: 'active' | 'disabled') 
   });
 }
 
-export function listGroups(search = '') {
-  return adminFetch<PaginatedData<AdminGroup>>(`/api/v1/admin/groups${buildQuery({ page: 1, page_size: 20, search: search.trim() })}`);
+export function listGroups(search = '', page = 1, pageSize = 20) {
+  return adminFetch<PaginatedData<AdminGroup>>(`/api/v1/admin/groups${buildQuery({ page, page_size: pageSize, search: search.trim() })}`);
 }
 
-export function listAccounts(search = '') {
-  return adminFetch<PaginatedData<AdminAccount>>(`/api/v1/admin/accounts${buildQuery({ page: 1, page_size: 20, search: search.trim() })}`);
+export function listAccounts(params: string | AccountListParams = '') {
+  const normalized = typeof params === 'string' ? { search: params } : params;
+
+  return adminFetch<PaginatedData<AdminAccount>>(`/api/v1/admin/accounts${buildQuery({
+    page: normalized.page ?? 1,
+    page_size: normalized.pageSize ?? 20,
+    search: normalized.search?.trim(),
+    platform: normalized.platform,
+    type: normalized.type,
+    status: normalized.status,
+    privacy_mode: normalized.privacy,
+    group: normalized.groupId,
+    sort_by: normalized.sortBy,
+    sort_order: normalized.sortOrder,
+  })}`);
+}
+
+export function importAccountData(data: AdminDataPayload, skipDefaultGroupBind = true) {
+  return adminFetch<AdminDataImportResult>('/api/v1/admin/accounts/data', {
+    method: 'POST',
+    data: {
+      data,
+      skip_default_group_bind: skipDefaultGroupBind,
+    },
+  });
+}
+
+export function bulkUpdateAccounts(accountIds: number[], updates: { group_ids?: number[]; confirm_mixed_channel_risk?: boolean }) {
+  return adminFetch<AccountBulkUpdateResult>('/api/v1/admin/accounts/bulk-update', {
+    method: 'POST',
+    data: {
+      account_ids: accountIds,
+      ...updates,
+    },
+  });
 }
 
 export function getAccount(accountId: number) {
