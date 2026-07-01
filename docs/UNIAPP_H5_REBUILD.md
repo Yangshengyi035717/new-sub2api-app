@@ -29,7 +29,7 @@ The rebuilt app covers:
 - The overview page uses `@qiun/uni-ucharts` / `qiun-data-charts` for health, account, sparkline, mix, column, and line charts.
 - Account testing supports Sub2API test endpoints that return normal JSON or `text/event-stream` streaming responses.
 - Account testing now recognizes `stream disconnected before completion: stream closed before response.completed` as a streaming test disconnect and shows a retry/change-model message instead of a raw transport error.
-- Account JSON import submits to `/api/v1/admin/accounts/data`; on App, file selection depends on runtime file picker support, and the page now falls back to pasted JSON when the system picker is unavailable.
+- Account JSON import submits to `/api/v1/admin/accounts/data`; the file button now uses `@dcloudio/uni-ui` `uni-file-picker` with `auto-upload=false`, keeps the App system picker as a fallback, and still allows pasted JSON when local file selection is unavailable. The project includes `sass` so Vite can compile the uni-ui SCSS component styles.
 - Announcement management uses `/api/v1/admin/announcements` and supports the same core fields as the PC admin dialog: `title`, Markdown `content`, `status`, `notify_mode`, `starts_at`, `ends_at`, and `targeting.any_of`.
 - The App build avoids browser-only APIs in the main uni-app flow to reduce blank-page risk on Android WebView/JSCore runtimes.
 
@@ -101,7 +101,7 @@ The local CLI build produces App runtime resources. To generate a production And
 Current local APK output:
 
 ```text
-dist/local-apk/sub2api-mobile-local-announcements-2.1.7.apk
+dist/local-apk/sub2api-mobile-local-file-picker-2.1.8.apk
 ```
 
 Local APK identity:
@@ -109,8 +109,8 @@ Local APK identity:
 ```text
 appid: __UNI__H565806EC
 android package: io.H565806EC
-versionName: 2.1.7
-versionCode: 217
+versionName: 2.1.8
+versionCode: 218
 signing: HBuilderX app-safe-pack Test.keystore / debug test certificate
 android label: Sub2API Mobile
 ```
@@ -118,7 +118,7 @@ android label: Sub2API Mobile
 Packaging steps used for the local APK:
 
 - Run `npm run build:app` to generate `dist/build/app`.
-- Use the previous local Android base package that already carries `versionName/versionCode` `2.1.6 / 216` and `dcloud_control.xml` `appver` `2.1.6`, then update the rebuilt package metadata to `2.1.7 / 217` and `appver` `2.1.7`.
+- Use the previous local Android base package that already carries `versionName/versionCode` `2.1.7 / 217` and `dcloud_control.xml` `appver` `2.1.7`, then update the rebuilt package metadata to `2.1.8 / 218` and `appver` `2.1.8`.
 - Replace `assets/apps/__UNI__H565806EC/www` in the APK with the latest `dist/build/app` resources.
 - Remove old `META-INF` signatures from the rebuilt APK archive.
 - Align with HBuilderX bundled `zipalign`.
@@ -128,9 +128,9 @@ Validation:
 
 - `zipalign -c -p 4`: passed.
 - `apksigner verify --verbose`: passed; v1/v2 are both true.
-- APK internal uni-app manifest: `2.1.7 / 217`.
+- APK internal uni-app manifest: `2.1.8 / 218`.
 - APK internal `compilerVersion`: `5.13`.
-- APK content check confirms announcement routes and `/api/v1/admin/announcements` are present in `app-service.js`.
+- APK content check confirms `uni-file-picker`, `chooseAndUploadFile`, and the JSON import fallback copy are present in the account import resources.
 
 Install note: because this APK uses a local debug/test certificate, uninstall any previously installed cloud-packaged APK first if Android reports a signature conflict.
 
@@ -153,7 +153,7 @@ git lfs pull
 本地 APK 路径：
 
 ```text
-dist/local-apk/sub2api-mobile-local-announcements-2.1.7.apk
+dist/local-apk/sub2api-mobile-local-file-picker-2.1.8.apk
 ```
 
 该 APK 使用 HBuilderX 测试证书签名，适合本地安装验证；正式发布请使用生产证书或 HBuilderX 云打包。

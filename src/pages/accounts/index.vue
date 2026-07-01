@@ -195,19 +195,26 @@
           <text>PC 同款接口：/admin/accounts/data。默认跳过自动绑定默认分组，避免导入后被额外挂到默认分组。</text>
         </view>
 
-        <!-- #ifdef H5 -->
         <view class="file-picker-row">
-          <input class="json-file-input" type="file" accept="application/json,.json" @change="handleImportFileChange" />
-          <text class="list-meta">{{ importFileName || '可选择 JSON 文件，或直接在下方粘贴 JSON 内容。' }}</text>
+          <uni-file-picker
+            file-mediatype="all"
+            mode="list"
+            :limit="1"
+            :auto-upload="false"
+            :disable-preview="true"
+            :del-icon="false"
+            :disabled="importingData"
+            :file-extname="['json']"
+            @select="handleImportFilePickerSelect"
+            @fail="handleImportFilePickerFail"
+          >
+            <button class="btn btn-ghost file-picker-action" :disabled="importingData">选择JSON文件</button>
+          </uni-file-picker>
+          <!-- #ifndef H5 -->
+          <button class="btn btn-ghost file-picker-action" :disabled="importingData" @tap="chooseImportJsonFile">备用选择文件</button>
+          <!-- #endif -->
+          <text class="list-meta">{{ importFileName || '请选择 PC 导出的账号 JSON，或直接在下方粘贴 JSON 内容。' }}</text>
         </view>
-        <!-- #endif -->
-
-        <!-- #ifndef H5 -->
-        <view class="file-picker-row">
-          <button class="btn btn-ghost file-picker-action" :disabled="importingData" @tap="chooseImportJsonFile">选择JSON文件</button>
-          <text class="list-meta">{{ importFileName || '从手机文件中选择 PC 导出的账号 JSON，或直接在下方粘贴 JSON 内容。' }}</text>
-        </view>
-        <!-- #endif -->
 
         <text class="input-label">JSON 内容</text>
         <textarea v-model="importJsonText" class="textarea import-textarea" placeholder='粘贴 PC 导出的账号 JSON，例如 {"accounts":[],"proxies":[]}' />
@@ -238,6 +245,7 @@ import PageShell from '@/components/uni/PageShell.vue';
 import HeroHeader from '@/components/uni/HeroHeader.vue';
 import SectionCard from '@/components/uni/SectionCard.vue';
 import NoticeBlock from '@/components/uni/NoticeBlock.vue';
+import UniFilePicker from '@dcloudio/uni-ui/lib/uni-file-picker/uni-file-picker.vue';
 import { bulkUpdateAccounts, getAccountModels, getAccountTodayStats, importAccountData, listAccounts, listGroups, setAccountSchedulable, testAccount } from '@/services/admin';
 import { adminConfigState, hasAuthenticatedAdminSession } from '@/store/admin-config';
 import type { AccountModelOption, AdminAccount, AdminDataImportResult, AdminGroup } from '@/types/admin';
@@ -876,13 +884,6 @@ async function applyImportFile(file: SelectedJsonFile) {
   }
 }
 
-async function handleImportFileChange(event: Event) {
-  const target = event.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (!file) return;
-  await applyImportFile(file);
-}
-
 function getChosenFile(result: unknown) {
   const record = (result || {}) as {
     tempFiles?: SelectedJsonFile[] | SelectedJsonFile;
@@ -893,6 +894,20 @@ function getChosenFile(result: unknown) {
 
   const path = Array.isArray(record.tempFilePaths) ? record.tempFilePaths[0] : '';
   return path ? { path } : undefined;
+}
+
+function handleImportFilePickerSelect(event: unknown) {
+  importError.value = '';
+  const file = getChosenFile(event);
+  if (file) void applyImportFile(file);
+  else importError.value = '没有获取到可读取的 JSON 文件，请直接粘贴 JSON 内容导入。';
+}
+
+function handleImportFilePickerFail(error: unknown) {
+  const message = getErrorMessage(error, '未选择文件。你也可以直接粘贴 JSON 内容导入。');
+  importError.value = message.includes('chooseAndUploadFile') || message.includes('chooseFile')
+    ? '当前运行环境无法打开文件选择器，请直接粘贴 JSON 内容导入。'
+    : message;
 }
 
 function chooseImportJsonFile() {
@@ -1343,12 +1358,6 @@ onPullDownRefresh(() => {
   border-radius: 22rpx;
   border: 2rpx dashed rgba(0, 142, 232, 0.28);
   background: rgba(255, 255, 255, 0.56);
-}
-
-.json-file-input {
-  width: 100%;
-  margin-bottom: 10rpx;
-  font-size: 22rpx;
 }
 
 .file-picker-action {

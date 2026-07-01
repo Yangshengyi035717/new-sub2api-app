@@ -608,3 +608,54 @@
 - Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-announcements-2.1.7.apk`.
 - Signing: used the HBuilderX bundled `Test.keystore` test certificate for local installation validation; production release must use a production certificate.
 - Rollback: revert the listed source/docs files and this appended `progress.md` entry, then delete `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-announcements-2.1.7.apk`.
+
+## 2026-07-01 - Task: Use uni-file-picker for account JSON import
+### What was done
+- Replaced the H5 raw JSON file input in the account import sheet with `uni-file-picker` configured for local JSON selection and `auto-upload=false`.
+- Kept the existing App system file picker button as a fallback, and preserved pasted JSON import for runtimes that cannot open or read local files.
+- Added the required `@dcloudio/uni-ui` dependency and `sass` build dependency for compiling the uni-ui file picker component styles.
+- Updated rebuild documentation with the new import picker behavior and dependency note.
+
+### Testing
+- `npm run build:h5`: passed; H5 build completed successfully with the uni-file-picker component included.
+- `npm run build:app`: passed; App build completed successfully and `scripts/fix-app-runtime-version.cjs` normalized App Runtime `compilerVersion` to `5.13`.
+- `git diff --check`: passed; only existing Windows line-ending warnings were reported.
+- Build output content check: `dist/build/h5` and `dist/build/app` contain the new `uni-file-picker` import flow and JSON picker copy.
+
+### Notes
+- Modified files:
+  - `src/pages/accounts/index.vue`: replaced the import file-selection UI with `uni-file-picker`, added picker select/fail handlers, and retained the App system picker fallback.
+  - `package.json`: added `@dcloudio/uni-ui` and `sass`.
+  - `package-lock.json`: locked the new dependencies.
+  - `docs/UNIAPP_H5_REBUILD.md`: documented the picker behavior and dependency requirement.
+  - `progress.md`: records this implementation, validation, and rollback point.
+- Rollback: use Git to revert `src/pages/accounts/index.vue`, `package.json`, `package-lock.json`, `docs/UNIAPP_H5_REBUILD.md`, and this appended `progress.md` entry.
+
+## 2026-07-01 - Task: Package Android APK 2.1.8 and push uni-file-picker import
+### What was done
+- Bumped the App version to `2.1.8 / 218` for the uni-file-picker JSON import build.
+- Rebuilt H5 and App resources, then repacked the local Android APK with the latest `dist/build/app` resources.
+- Used the 2.1.7 no-source Android base package, replaced `assets/apps/__UNI__H565806EC/www`, updated native version metadata, internal uni-app manifest, and `dcloud_control.xml` appver to `2.1.8`.
+- Aligned and signed the installable APK with the HBuilderX bundled local test certificate.
+- Updated rebuild documentation to point to the `2.1.8` APK.
+
+### Testing
+- `npm run build:h5`: passed; H5 build completed successfully.
+- `npm run build:app`: passed; App build completed successfully and `scripts/fix-app-runtime-version.cjs` normalized App Runtime `compilerVersion` to `5.13`.
+- `zipalign -c -p 4 dist/local-apk/sub2api-mobile-local-file-picker-2.1.8.apk`: passed.
+- `apksigner verify --verbose dist/local-apk/sub2api-mobile-local-file-picker-2.1.8.apk`: passed; v1/v2 are both true.
+- APK content check: internal uni-app manifest is `2.1.8 / 218`; `compilerVersion` is `5.13`; `dcloud_control.xml` appver is `2.1.8`; native `apktool.yml` reports `versionCode: 218` and `versionName: 2.1.8`; account import resources contain `uni-file-picker`, `chooseAndUploadFile`, and the JSON import fallback copy.
+- `git diff --check`: passed; only existing Windows line-ending warnings were reported.
+
+### Notes
+- Modified files:
+  - `src/pages/accounts/index.vue`: uses `uni-file-picker` for JSON file selection while retaining the App fallback picker and pasted JSON fallback.
+  - `package.json`: added `@dcloudio/uni-ui` and `sass` for the picker component.
+  - `package-lock.json`: locked the new dependencies.
+  - `src/manifest.json`: bumped App version to `2.1.8 / 218`.
+  - `docs/UNIAPP_H5_REBUILD.md`: documented the uni-file-picker import behavior and current APK package.
+  - `progress.md`: records this packaging, validation, and rollback point.
+  - `dist/local-apk/sub2api-mobile-local-file-picker-2.1.8.apk`: generated the installable local Android APK.
+- Build output: `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-file-picker-2.1.8.apk`.
+- Signing: used the HBuilderX bundled `Test.keystore` test certificate for local installation validation; production release must use a production certificate.
+- Rollback: revert the listed source/docs files and this appended `progress.md` entry, then delete `D:\project\sub2api-mobile\dist\local-apk\sub2api-mobile-local-file-picker-2.1.8.apk`.
